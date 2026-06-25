@@ -1,0 +1,129 @@
+<view class="page {{isBreak ? 'break-mode' : 'focus-mode'}}">
+  <view class="mode-selector">
+    <view
+      class="mode-btn {{mode === 'focus' ? 'active focus' : ''}}"
+      bindtap="setFocusMode"
+    >
+      专注
+    </view>
+    <view
+      class="mode-btn {{mode === 'shortBreak' ? 'active break' : ''}}"
+      bindtap="setShortBreakMode"
+    >
+      短休息
+    </view>
+    <view
+      class="mode-btn {{mode === 'longBreak' ? 'active break' : ''}}"
+      bindtap="setLongBreakMode"
+    >
+      长休息
+    </view>
+  </view>
+
+  <view class="timer-container">
+    <view class="timer-ring {{mode !== 'focus' ? 'break' : 'focus'}}">
+      <view class="timer-inner">
+        <text class="time-text">{{timeDisplay}}</text>
+        <text class="mode-label">{{modeLabel}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="controls">
+    <view class="control-btn secondary" bindtap="resetTimer">
+      <text class="btn-icon">↺</text>
+    </view>
+    <view class="control-btn main" bindtap="toggleTimer">
+      <text class="btn-icon">{{isRunning ? '❚❚' : '▶'}}</text>
+    </view>
+    <view class="control-btn secondary" bindtap="skipToNext">
+      <text class="btn-icon">⏭</text>
+    </view>
+  </view>
+
+  <view class="pomodoro-counter">
+    <view class="dots">
+      <view
+        wx:for="{{pomodoroDots}}"
+        wx:key="index"
+        class="dot {{item ? 'filled' : ''}} {{!item && index === (pomodoroCount % longBreakInterval) && mode === 'focus' ? 'pulse' : ''}}"
+      ></view>
+    </view>
+    <text class="counter-text">
+      今日完成 <text class="count">{{pomodoroCount}}</text> 个番茄
+    </text>
+  </view>
+
+  <view class="settings-btn" bindtap="showSettings">
+    <text class="icon">⚙</text>
+  </view>
+
+  <view class="settings-overlay {{showSettingsPanel ? 'show' : ''}}" bindtap="hideSettings">
+    <view class="settings-panel" catchtap="stopPropagation">
+      <view class="settings-header">
+        <text class="title">设置</text>
+        <view class="close-btn" bindtap="hideSettings">✕</view>
+      </view>
+
+      <view class="setting-item">
+        <text class="label">专注时长</text>
+        <view class="slider-row">
+          <slider
+            min="1"
+            max="60"
+            value="{{focusMinutes}}"
+            bindchange="onFocusDurationChange"
+            block-size="20"
+            activeColor="#FF6347"
+          />
+          <text class="value">{{focusMinutes}}分钟</text>
+        </view>
+      </view>
+
+      <view class="setting-item">
+        <text class="label">短休息时长</text>
+        <view class="slider-row">
+          <slider
+            min="1"
+            max="30"
+            value="{{shortBreakMinutes}}"
+            bindchange="onShortBreakDurationChange"
+            block-size="20"
+            activeColor="#98D8AA"
+          />
+          <text class="value">{{shortBreakMinutes}}分钟</text>
+        </view>
+      </view>
+
+      <view class="setting-item">
+        <text class="label">长休息时长</text>
+        <view class="slider-row">
+          <slider
+            min="5"
+            max="60"
+            value="{{longBreakMinutes}}"
+            bindchange="onLongBreakDurationChange"
+            block-size="20"
+            activeColor="#98D8AA"
+          />
+          <text class="value">{{longBreakMinutes}}分钟</text>
+        </view>
+      </view>
+
+      <view class="setting-item">
+        <text class="label">长休息间隔</text>
+        <view class="slider-row">
+          <slider
+            min="2"
+            max="8"
+            value="{{longBreakInterval}}"
+            bindchange="onLongBreakIntervalChange"
+            block-size="20"
+            activeColor="#FF6347"
+          />
+          <text class="value">{{longBreakInterval}}个</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
